@@ -12,18 +12,18 @@
 @implementation UIView (Benihime)
 
 - (UIView *)findFirstResponder {
-  if (self.isFirstResponder) {        
-    return self;     
+  if (self.isFirstResponder) {
+    return self;
   }
-  
+
   for (UIView *subView in self.subviews) {
     UIView *firstResponder = [subView findFirstResponder];
-    
+
     if (firstResponder != nil) {
       return firstResponder;
     }
   }
-  
+
   return nil;
 }
 
@@ -44,6 +44,51 @@
 
 - (void)benihimeDidTapView:(UITapGestureRecognizer *)gesture {
   [self findAndResignFirstResponder];
+}
+
+- (UIView *)ancestorWithClass:(Class)ancestorClass {
+  return [self.class ancestorOfView:self withClass:ancestorClass];
+}
+
++ (UIView *)ancestorOfView:(UIView *)child withClass:(Class)ancestorClass {
+  if (!child.superview)
+    return nil;
+  if ([child.superview isKindOfClass:ancestorClass])
+    return child.superview;
+  return [self.class ancestorOfView:child.superview withClass:ancestorClass];
+}
+
+- (UIView *)descendantWithClass:(Class)descendantClass {
+  return [self.class descendantOfView:self withClass:descendantClass];
+}
+
++ (UIView *)descendantOfView:(UIView *)parent withClass:(Class)descendantClass {
+  // Search direct children first
+  for (UIView *child in parent.subviews) {
+    if ([child isKindOfClass:descendantClass])
+      return child;
+  }
+  // Search grandchildren.
+  for (UIView *child in parent.subviews) {
+    UIView *match = [self.class descendantOfView:child withClass:descendantClass];
+    if (match)
+      return match;
+  }
+
+  return nil;
+}
+
+- (UIView *)childWithClass:(Class)childClass {
+  return [self.class childOfView:self withClass:childClass];
+}
+
++ (UIView *)childOfView:(UIView *)parent withClass:(Class)childClass {
+  for (UIView *child in parent.subviews) {
+    if ([child isKindOfClass:childClass])
+      return child;
+  }
+
+  return nil;
 }
 
 @end

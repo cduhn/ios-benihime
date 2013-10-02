@@ -4,10 +4,15 @@
 //  Created by Shiki on 11/23/11.
 //
 
-#define B_UI_IS_IPAD() UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad
-
 #define B_UI_ORIENTATION_IS_PORTRAIT() UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)
 #define B_UI_ORIENTATION_IS_LANDSCAPE() UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)
+
+// http://stackoverflow.com/a/13156390/246142
+#define DEVICE_IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define DEVICE_IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define DEVICE_IS_TALL_IPHONE (DEVICE_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 568.0f)
+
+#define DEVICE_IS_RETINA ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0))
 
 /**
  * System Versioning Preprocessor Macros
@@ -23,7 +28,7 @@
  * Null, Nil, Empty String macros
  * From: http://koolistov.net/blog/2012/02/26/nil-null-empty-macros/
  */
-#define NIL_IF_NULL(foo) ((foo == [NSNull null]) ? nil : foo)
+#define NIL_IF_NULL(foo) ([[NSNull null] isEqual:foo] ? nil : foo)
 #define NULL_IF_NIL(foo) ((foo == nil) ? [NSNull null] : foo)
 #define EMPTY_IF_NIL(foo) ((foo == nil) ? @"" : foo)
 #define EMPTY_IF_NULL(foo) ([[NSNull null] isEqual:foo] ? @"" : foo)

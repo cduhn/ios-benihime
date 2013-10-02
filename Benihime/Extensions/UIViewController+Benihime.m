@@ -37,7 +37,7 @@
                   ( self.navigationController && self.navigationController.parentViewController && self.navigationController.parentViewController.presentedViewController == self.navigationController) ||
                   //or if the parent of my UITabBarController is also a UITabBarController class, then there is no way to do that, except by using a modal presentation
                   [[[self tabBarController] parentViewController] isKindOfClass:[UITabBarController class]]);
-  
+
   //iOS 5+
   if (!isModal && [self respondsToSelector:@selector(presentingViewController)]) {
 
@@ -46,9 +46,9 @@
                (self.navigationController && self.navigationController.presentingViewController && self.navigationController.presentingViewController.presentedViewController == self.navigationController) ||
                //or if the parent of my UITabBarController is also a UITabBarController class, then there is no way to do that, except by using a modal presentation
                [[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]]);
-    
+
   }
-  
+
   return isModal;
 }
 
